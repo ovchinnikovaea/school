@@ -2,9 +2,8 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,25 +11,27 @@ import java.util.stream.Collectors;
 
 @Service
 public class FacultyServiceImpl implements FacultyService{
-    private final Map<Long, Faculty> faculties = new HashMap<>();
 
-    private static long generatedFacultiesId = 0;
+    private final FacultyRepository facultyRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
+
 
     @Override
     public Faculty addFaculty(Faculty faculty) {
-        faculty.setId(++generatedFacultiesId);
-        faculties.put(generatedFacultiesId, faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     @Override
     public Faculty getFaculty(long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).get();
     }
 
     @Override
     public List<Faculty> getFacultyByColor(String color) {
-        return faculties.values()
+        return facultyRepository.findAll()
                 .stream()
                 .filter(it -> it.getColor().equals(color))
                 .collect(Collectors.toList());
@@ -38,15 +39,12 @@ public class FacultyServiceImpl implements FacultyService{
 
     @Override
     public Faculty updateFaculty(long id, Faculty faculty) {
-        Faculty updateFaculty = faculties.get(id);
-        updateFaculty.setName(faculty.getName());
-        updateFaculty.setColor(faculty.getColor());
-        return updateFaculty;
+        return facultyRepository.save(faculty);
     }
 
     @Override
-    public Faculty deleteFaculty(long id) {
-        return faculties.remove(id);
+    public void deleteFaculty(long id) {
+        facultyRepository.deleteById(id);
     }
 
 }

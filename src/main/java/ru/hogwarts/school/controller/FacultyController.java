@@ -33,8 +33,8 @@ public class FacultyController {
     }
 
     @DeleteMapping ("/{id}")
-    public Faculty delete(@PathVariable Long id) {
-        return facultyServise.deleteFaculty(id);
+    public void delete(@PathVariable Long id) {
+        facultyServise.deleteFaculty(id);
     }
 
     @GetMapping
