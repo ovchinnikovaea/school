@@ -23,7 +23,7 @@ public class StudentServiceImpl implements StudentService{
     }
     @Override
     public Student getStudent(long id) {
-        return studentRepository.findById(id).orElse(null);
+        return studentRepository.findById(id).orElseThrow(() -> new StudentsNotFoundException("Студент не найден!"));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class StudentServiceImpl implements StudentService{
     public Faculty getFaculty(Long id) {
         return studentRepository.findById(id)
                 .map(Student::getFaculty)
-                .orElse(null);
+                .orElseThrow(() -> new StudentsNotFoundException("Студент не найден!"));
     }
 
 

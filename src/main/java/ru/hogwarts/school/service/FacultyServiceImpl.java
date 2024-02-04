@@ -28,7 +28,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty getFaculty(long id) {
-        return facultyRepository.findById(id).orElse(null);
+        return facultyRepository.findById(id).orElseThrow(() -> new FacultiesNotFoundException("Факультет не найден!"));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FacultyServiceImpl implements FacultyService {
     public Collection<Student> getStudents(long id) {
         return facultyRepository.findById(id)
                 .map(Faculty::getStudents)
-                .orElse(null);
+                .orElseThrow(() -> new FacultiesNotFoundException("Факультет не найден!"));
 
     }
 
