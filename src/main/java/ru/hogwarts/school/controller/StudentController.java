@@ -1,22 +1,26 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.service.StudentServiceImpl;
+import ru.hogwarts.school.service.impl.AvatarServiceImpl;
+import ru.hogwarts.school.service.impl.StudentServiceImpl;
 
-import java.util.Collection;
-import java.util.List;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 
     private final StudentServiceImpl studentService;
+    private final AvatarServiceImpl avatarService;
 
-    public StudentController(StudentServiceImpl studentService) {
+    public StudentController(StudentServiceImpl studentService, AvatarServiceImpl avatarService) {
         this.studentService = studentService;
+        this.avatarService = avatarService;
     }
 
     @PostMapping
@@ -50,4 +54,9 @@ public class StudentController {
         return studentService.getFaculty(id);
     }
 
+    @PostMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadAvatar(@PathVariable Long id, @RequestParam MultipartFile avatar) throws IOException {
+        avatarService.uploadAvatar(id, avatar);
+        return ResponseEntity.ok().build();
+    }
 }
