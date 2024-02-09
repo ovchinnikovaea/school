@@ -21,9 +21,9 @@ import java.nio.file.Path;
 @RequestMapping("avatars")
 public class AvatarController {
 
-    private final AvatarServiceImpl avatarService;
+    private final AvatarService avatarService;
 
-    public AvatarController(AvatarServiceImpl avatarService) {
+    public AvatarController(AvatarService avatarService) {
         this.avatarService = avatarService;
     }
 

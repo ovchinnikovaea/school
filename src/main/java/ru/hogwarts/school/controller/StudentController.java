@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.AvatarService;
+import ru.hogwarts.school.service.StudentService;
 import ru.hogwarts.school.service.impl.AvatarServiceImpl;
 import ru.hogwarts.school.service.impl.StudentServiceImpl;
 
@@ -16,10 +17,10 @@ import java.io.IOException;
 @RequestMapping("/students")
 public class StudentController {
 
-    private final StudentServiceImpl studentService;
+    private final StudentService studentService;
     private final AvatarService avatarService;
 
-    public StudentController(StudentServiceImpl studentService, AvatarService avatarService) {
+    public StudentController(StudentService studentService, AvatarService avatarService) {
         this.studentService = studentService;
         this.avatarService = avatarService;
     }
