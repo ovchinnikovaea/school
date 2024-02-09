@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.service.impl.AvatarServiceImpl;
 import ru.hogwarts.school.service.impl.StudentServiceImpl;
 
@@ -16,9 +17,9 @@ import java.io.IOException;
 public class StudentController {
 
     private final StudentServiceImpl studentService;
-    private final AvatarServiceImpl avatarService;
+    private final AvatarService avatarService;
 
-    public StudentController(StudentServiceImpl studentService, AvatarServiceImpl avatarService) {
+    public StudentController(StudentServiceImpl studentService, AvatarService avatarService) {
         this.studentService = studentService;
         this.avatarService = avatarService;
     }
@@ -54,9 +55,9 @@ public class StudentController {
         return studentService.getFaculty(id);
     }
 
-    @PostMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(@PathVariable Long id, @RequestParam MultipartFile avatar) throws IOException {
-        avatarService.uploadAvatar(id, avatar);
+    @PostMapping(value = "/{studentId}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadAvatar(@PathVariable Long studentId, @RequestParam MultipartFile avatar) throws IOException {
+        avatarService.uploadAvatar(studentId, avatar);
         return ResponseEntity.ok().build();
     }
 }

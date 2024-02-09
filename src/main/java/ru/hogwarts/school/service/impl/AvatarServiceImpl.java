@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.AvatarService;
-import ru.hogwarts.school.service.StudentService;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -20,22 +20,22 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Transactional
 public class AvatarServiceImpl implements AvatarService {
-    @Value("${path.to.avatars.folder}")
-    private String avatarsDir;
 
     private final StudentRepository studentRepository;
 
     private final AvatarRepository avatarRepository;
-
     public AvatarServiceImpl(StudentRepository studentRepository, AvatarRepository avatarRepository) {
         this.studentRepository = studentRepository;
         this.avatarRepository = avatarRepository;
     }
 
-    public void uploadAvatar(Long id, MultipartFile avatarFile) throws IOException {
-        Student student = studentRepository.findById(id).orElseThrow();
+    @Value("${path.to.avatars.folder}")
+    private String avatarsDir;
 
-        Path filePath = Path.of(avatarsDir, student.getId() + "." + getExtensions(avatarFile.getOriginalFilename()));
+    public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+        Student student = studentRepository.findById(studentId).orElseThrow();
+
+        Path filePath = Path.of(avatarsDir, studentId + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -47,7 +47,7 @@ public class AvatarServiceImpl implements AvatarService {
         ) {
             bis.transferTo(bos);
         }
-        Avatar avatar = findAvatar(id);
+        Avatar avatar = findAvatarByStudentId(studentId);
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(avatarFile.getSize());
@@ -56,8 +56,13 @@ public class AvatarServiceImpl implements AvatarService {
         avatarRepository.save(avatar);
     }
 
-    public Avatar findAvatar(Long studentId) {
-        return avatarRepository.findByStudentId(studentId).orElseThrow();
+    @Override
+    public Avatar findAvatar(Long id) {
+        return avatarRepository.findById(id).orElseThrow();
+    }
+
+    private Avatar findAvatarByStudentId(Long studentId) {
+        return avatarRepository.findByStudent_id(studentId).orElse(new Avatar());
     }
 
     private String getExtensions(String fileName) {
