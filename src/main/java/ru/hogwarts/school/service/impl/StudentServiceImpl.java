@@ -40,7 +40,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student updateStudent(long id, Student student) {
-        return studentRepository.save(student);
+       return studentRepository.findById(id).map(studentFromDb -> {
+            studentFromDb.setName(student.getName());
+            studentFromDb.setAge(student.getAge());
+            return studentRepository.save(studentFromDb);
+        }).orElseThrow();
     }
 
     @Override

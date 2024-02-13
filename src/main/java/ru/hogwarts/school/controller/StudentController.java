@@ -8,8 +8,6 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.service.StudentService;
-import ru.hogwarts.school.service.impl.AvatarServiceImpl;
-import ru.hogwarts.school.service.impl.StudentServiceImpl;
 
 import java.io.IOException;
 
