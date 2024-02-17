@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.service.FacultyService;
 import ru.hogwarts.school.service.impl.FacultyServiceImpl;
 
 import java.util.Collection;
@@ -12,9 +13,9 @@ import java.util.Collection;
 @RequestMapping("/faculties")
 public class FacultyController {
 
-    private final FacultyServiceImpl facultyServise;
+    private final FacultyService facultyServise;
 
-    public FacultyController(FacultyServiceImpl facultyServise) {
+    public FacultyController(FacultyService facultyServise) {
         this.facultyServise = facultyServise;
     }
 
