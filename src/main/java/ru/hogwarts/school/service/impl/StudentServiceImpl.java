@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service.impl;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.StudentsNotFoundException;
 import ru.hogwarts.school.model.Faculty;
@@ -40,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student updateStudent(long id, Student student) {
-       return studentRepository.findById(id).map(studentFromDb -> {
+        return studentRepository.findById(id).map(studentFromDb -> {
             studentFromDb.setName(student.getName());
             studentFromDb.setAge(student.getAge());
             return studentRepository.save(studentFromDb);
