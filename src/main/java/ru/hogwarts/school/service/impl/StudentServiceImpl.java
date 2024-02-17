@@ -24,6 +24,7 @@ public class StudentServiceImpl implements StudentService {
     public Student addStudent(Student student) {
         return studentRepository.save(student);
     }
+
     @Override
     public Student getStudent(long id) {
         return studentRepository.findById(id).orElseThrow(() -> new StudentsNotFoundException("Студент не найден!"));
@@ -63,5 +64,19 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new StudentsNotFoundException("Студент не найден!"));
     }
 
+    @Override
+    public Integer getNumberOfStudents() {
+        return studentRepository.getNumberOfStudents();
+    }
+
+    @Override
+   public Integer getAverageAgeOfStudents() {
+        return studentRepository.getAverageAgeOfStudents();
+    }
+
+    @Override
+   public List<Student> getFiveLatestStudents() {
+        return studentRepository.getFiveLatestStudents();
+    }
 
 }
