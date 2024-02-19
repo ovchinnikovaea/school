@@ -10,6 +10,7 @@ import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.service.StudentService;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/students")
@@ -58,5 +59,20 @@ public class StudentController {
     public ResponseEntity<String> uploadAvatar(@PathVariable Long studentId, @RequestParam MultipartFile avatar) throws IOException {
         avatarService.uploadAvatar(studentId, avatar);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/get-number-students")
+    public Integer getNumberOfStudents() {
+        return studentService.getNumberOfStudents();
+    }
+
+    @GetMapping("/get-average-age")
+    public Integer getAverageAge() {
+        return studentService.getAverageAgeOfStudents();
+    }
+
+    @GetMapping("/get-latest-students")
+    public List<Student> getLatestStudents() {
+        return studentService.getFiveLatestStudents();
     }
 }
