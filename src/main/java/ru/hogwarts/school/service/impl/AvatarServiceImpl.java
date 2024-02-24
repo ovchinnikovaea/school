@@ -2,6 +2,8 @@ package ru.hogwarts.school.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,8 @@ public class AvatarServiceImpl implements AvatarService {
         this.avatarRepository = avatarRepository;
     }
 
+    Logger logger = LoggerFactory.getLogger(AvatarServiceImpl.class);
+
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
@@ -61,20 +65,24 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar findAvatar(Long id) {
+        logger.info("Was invoked method for find avatar");
         return avatarRepository.findById(id).orElseThrow();
     }
 
     @Override
     public List<Avatar> getAllAvatars(Integer pageNumber, Integer pageSize) {
+        logger.info("Was invoked method for get all avatars");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
 
     private Avatar findAvatarByStudentId(Long studentId) {
+        logger.info("Was invoked method for find avatar by student id");
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
     private String getExtensions(String fileName) {
+        logger.info("Was invoked method for get extension");
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }
