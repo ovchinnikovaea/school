@@ -86,13 +86,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-   public Integer getAverageAgeOfStudents() {
+    public Integer getAverageAgeOfStudents() {
         logger.info("Was invoked method for get average age of students");
         return studentRepository.getAverageAgeOfStudents();
     }
 
     @Override
-   public List<Student> getFiveLatestStudents() {
+    public List<Student> getFiveLatestStudents() {
         logger.info("Was invoked method for get 5 latest students");
         return studentRepository.getFiveLatestStudents();
     }
@@ -116,4 +116,50 @@ public class StudentServiceImpl implements StudentService {
                 .average().orElse(0);
     }
 
+    @Override
+    public void printParallel() {
+        List<String> names = studentRepository.findAll()
+                .stream()
+                .map(Student::getName)
+                .toList();
+
+        System.out.println(Thread.currentThread().getName() + ": " + names.get(0));
+        System.out.println(Thread.currentThread().getName() + ": " + names.get(1));
+
+        new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + ": " + names.get(2));
+            System.out.println(Thread.currentThread().getName() + ": " + names.get(3));
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + ": " + names.get(4));
+            System.out.println(Thread.currentThread().getName() + ": " + names.get(5));
+        }).start();
+    }
+
+    @Override
+    public void printSynchronized() {
+        List<String> names = studentRepository.findAll()
+                .stream()
+                .map(Student::getName)
+                .toList();
+
+        printSynchronizedNames(names.get(0));
+        printSynchronizedNames(names.get(1));
+
+        new Thread(() -> {
+            printSynchronizedNames(names.get(2));
+            printSynchronizedNames(names.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printSynchronizedNames(names.get(4));
+            printSynchronizedNames(names.get(5));
+        }).start();
+    }
+
+    private synchronized void printSynchronizedNames(String name) {
+        System.out.println(Thread.currentThread().getName() + ": " + name);
+    }
 }
+
