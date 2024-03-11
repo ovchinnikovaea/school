@@ -10,6 +10,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,6 +95,25 @@ public class StudentServiceImpl implements StudentService {
    public List<Student> getFiveLatestStudents() {
         logger.info("Was invoked method for get 5 latest students");
         return studentRepository.getFiveLatestStudents();
+    }
+
+    @Override
+    public List<String> getStudentsWithNamesStartA() {
+        return studentRepository.findAll()
+                .stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(it -> it.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Double getAverageAgeWithStream() {
+        return studentRepository.findAll()
+                .stream()
+                .mapToInt(Student::getAge)
+                .average().orElse(0);
     }
 
 }
